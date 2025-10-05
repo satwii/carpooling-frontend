@@ -1,20 +1,19 @@
-name: Deploy React Frontend to Azure WebApp
+name: Deploy React app to Azure Web App
 
 on:
   push:
     branches:
-      - main  # or your deployment branch
+      - main  # change if your default branch is different
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -24,15 +23,9 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Upload artifact for deployment
-        uses: actions/upload-artifact@v3
-        with:
-          name: react-app
-          path: build
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "my-frontend-app" # Replace with your Azure Web App name
+          app-name: your-app-service-name   # replace with your Azure Web App name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: build
